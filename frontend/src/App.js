@@ -12,6 +12,14 @@ async function postImage({ image, description }) {
   const result = await axios.post('/images', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
   return result.data
 }
+async function postImageFromFlask({ image, description }) {
+  const formData = new FormData();
+  formData.append("file", image)
+  formData.append("filename", description)
+
+  const result = await axios.post('http://127.0.0.1:5000/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+  return result.data
+}
 
 
 function App() {
@@ -42,10 +50,15 @@ function App() {
       }
     });
   }
+
+
   const submit = async event => {
     event.preventDefault()
     //const result = await postImage({image: file, description})
-    const result = postImageFromClient({ image: file, description })
+    //const result = postImageFromClient({ image: file, description })
+    const result = await postImageFromFlask({image: file, description})
+
+    
   }
 
   const fileSelected = event => {

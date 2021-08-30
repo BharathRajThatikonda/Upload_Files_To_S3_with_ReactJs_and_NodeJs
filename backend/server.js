@@ -9,15 +9,14 @@ var db = require('mime-db')
 const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
 
-const { uploadFile, getFileStream } = require('./s3')
+const { uploadFile, getFiles } = require('./s3')
 
 const app = express()
 
 
-app.get('/images/:key', (req, res) => {
+app.get('/images', (req, res) => {
   console.log(req.params)
-  const key = req.params.key
-  const readStream = getFileStream(key)
+  const readStream = getFiles()
 
   readStream.pipe(res)
 })

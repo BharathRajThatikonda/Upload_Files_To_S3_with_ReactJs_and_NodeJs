@@ -28,8 +28,26 @@ function uploadFile(file,fileType) {
 }
 
 function getFiles(){
-  s3.getFiles().then()
+  const params = {
+    Bucket: bucketName
+  }
+
+  // const data = s3.listObjects().then()
+  return s3.listObjects(params, function (err, data) {
+    if(err)throw err;
+    const bucketName = data.Name
+    const fileName = []
+    data.Contents.map(file => {
+      fileName.push({fileName:file.Key,LastModified:file.LastModified,Size:file.Size})
+    })
+    console.log({files:fileName,bucketName});
+    return {files:fileName,bucketName}
+   });
+  
 }
+getFiles()
+exports.getFiles = getFiles
+
 exports.uploadFile = uploadFile
 
 
